@@ -72,3 +72,26 @@ stages:
                   --resource-group $(resourceGroupName) \
                   --template-file $(templateFile) \
                   --parameters adminUsername='$(adminUN)' adminPassword='$(adminPASS)'
+
+- stage: Cleanup
+  displayName: 'Cleanup Resource Group'
+  dependsOn: Deploy
+  condition: succeeded()
+  jobs:
+  - deployment: DeleteRGDeployment
+    displayName: 'Delete Resource Group Deployment'
+    environment: 'Cleanup'  # This enables approval flow
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureCLI@2
+            displayName: 'Delete Resource Group'
+            inputs:
+              azureSubscription: 'azure-connection'
+              scriptType: bash
+              scriptLocation: inlineScript
+              useGlobalConfig: false
+              inlineScript: |
+                echo "Deleting resource group $(resourceGroupName)..."
+                az group delete --name $(resourceGroupName) --yes --no-wait
