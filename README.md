@@ -9,3 +9,10 @@ This repository contains an Azure DevOps pipeline that **builds, tests, deploys*
 ```yaml
 trigger:
 - none
+
+🔁 Stages in the Pipeline
+Stage	Description
+🛠 Build	Placeholder for build steps
+🧪 Test	Placeholder for future tests
+🚀 Deploy	Deploys infrastructure using Bicep
+🧹 Cleanup	Deletes the resource group (optional)
