@@ -1,4 +1,4 @@
-[[![Build Status](https://dev.azure.com/juicttesting3/JUICT/_apis/build/status%2FSLAMNOTH.Pipeline-Demo2?branchName=main)](https://dev.azure.com/juicttesting3/JUICT/_build/latest?definitionId=4&branchName=main)](https://dev.azure.com/juicttesting3/JUICT/_apis/build/status%2FSLAMNOTH.Pipeline-Demo2?branchName=main)
+https://dev.azure.com/juicttesting3/JUICT/_apis/build/status%2FSLAMNOTH.Pipeline-Demo2?branchName=main 
 # 🚀 Azure DevOps Bicep Deployment Pipeline
 
 This repository contains an Azure DevOps pipeline that **builds, tests, deploys**, and optionally **cleans up** infrastructure using **Bicep** templates. The main goal is to provision a secure Windows VM in Azure.
