@@ -1,0 +1,74 @@
+trigger:
+- main
+
+variables:
+  location: 'westeurope'
+  resourceGroupName: 'JuictInfraRG'
+  templateFile: 'main.bicep'
+  adminUN: 'azureuser'   # Username stays in pipeline
+  # adminPASS will be fetched from Key Vault
+
+stages:
+- stage: Build
+  displayName: 'Build Stage'
+  jobs:
+  - job: BuildJob
+    displayName: 'Build Job'
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - checkout: self
+    - script: echo "Nothing to build for Bicep templates"
+      displayName: 'Build Placeholder'
+
+- stage: Test
+  displayName: 'Test Stage'
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+  - job: TestJob
+    displayName: 'Test Job'
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - script: echo "No tests implemented yet"
+      displayName: 'Test Placeholder'
+
+- stage: Deploy
+  displayName: 'Deploy Infrastructure'
+  dependsOn: Test
+  condition: succeeded()
+  jobs:
+  - deployment: DeployVM
+    displayName: 'Deploy Windows VM'
+    environment: 'Production'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+
+          - task: AzureKeyVault@2
+            name: FetchSecrets
+            inputs:
+              azureSubscription: 'azure-connection'
+              KeyVaultName: 'KeyVaultJuict'
+              SecretsFilter: 'adminPASS'
+              RunAsPreJob: true
+
+          - task: AzureCLI@2
+            displayName: 'Deploy Bicep Template'
+            inputs:
+              azureSubscription: 'azure-connection'
+              scriptType: bash
+              scriptLocation: inlineScript
+              useGlobalConfig: false
+              inlineScript: |
+                echo "Creating resource group if not exists..."
+                az group create --name $(resourceGroupName) --location $(location)
+
+                echo "Deploying Bicep template..."
+                az deployment group create \
+                  --resource-group $(resourceGroupName) \
+                  --template-file $(templateFile) \
+                  --parameters adminUsername='$(adminUN)' adminPassword='$(adminPASS)'
