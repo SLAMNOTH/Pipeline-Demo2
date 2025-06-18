@@ -26,12 +26,25 @@ stages:
   condition: succeeded()
   jobs:
   - job: TestJob
-    displayName: 'Test Job'
+    displayName: 'Lint Bicep Template'
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-    - script: echo "No tests implemented yet"
-      displayName: 'Test Placeholder'
+    - checkout: self
+
+    - task: AzureCLI@2
+      displayName: 'Run Bicep Linter'
+      inputs:
+        azureSubscription: 'azure-connection'
+        scriptType: bash
+        scriptLocation: inlineScript
+        useGlobalConfig: false
+        inlineScript: |
+          echo "Installing Bicep CLI..."
+          az bicep install
+
+          echo "Linting Bicep file..."
+          az bicep build --file $(templateFile)
 
 - stage: Deploy
   displayName: 'Deploy Infrastructure'
