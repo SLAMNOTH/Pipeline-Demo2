@@ -5,8 +5,7 @@ variables:
   location: 'westeurope'
   resourceGroupName: 'JuictInfraRG'
   templateFile: 'main.bicep'
-  adminUN: 'azureuser'   # Username stays in pipeline
-  # adminPASS will be fetched from Key Vault
+  adminUN: 'azureuser'
 
 stages:
 - stage: Build
