@@ -3,7 +3,7 @@ param adminUsername string
 @secure()
 param adminPassword string
 param location string = resourceGroup().location
-param vmName string = 'win-vm-juict'
+param vmName string = 'win-vm'
 param vmSize string = 'Standard_D2s_v5'
 param OSVersion string = '2022-datacenter-azure-edition'
 
