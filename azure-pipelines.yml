@@ -17,8 +17,8 @@ stages:
       vmImage: 'ubuntu-latest'
     steps:
     - checkout: self
-    - script: echo "Nothing to build for Bicep templates"
-      displayName: 'Build Placeholder'
+    - script: echo "Niks om te builden"
+      displayName: 'Builder'
 
 - stage: Test
   displayName: 'Test Stage'
@@ -33,7 +33,7 @@ stages:
     - checkout: self
 
     - task: AzureCLI@2
-      displayName: 'Run Bicep Linter'
+      displayName: 'Linter fase'
       inputs:
         azureSubscription: 'azure-connection'
         scriptType: bash
@@ -92,7 +92,7 @@ stages:
   jobs:
   - deployment: DeleteRGDeployment
     displayName: 'Delete Resource Group Deployment'
-    environment: 'Cleanup'  # This enables approval flow
+    environment: 'Cleanup' 
     strategy:
       runOnce:
         deploy:
